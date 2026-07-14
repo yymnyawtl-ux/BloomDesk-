@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="О компании BloomDesk — история, миссия, ценности и команда. SaaS-платформа для цветочных магазинов с 2020 года.">
+<meta property="og:title" content="О компании BloomDesk">
+<meta property="og:description" content="Мы создаём инструмент для тех, кто создаёт красоту. 35 сотрудников, 1200+ клиентов, 60+ городов.">
+<meta property="og:type" content="website">
+<title>О компании — BloomDesk</title>
+<style>
+:root{
+  --primary:#2D5A4A;
+  --secondary:#7A9E8E;
+  --accent:#E8B4B8;
+  --bg:#FAF7F2;
+  --surface:#FFFFFF;
+  --text:#2C3E33;
+  --text-secondary:#6B7B73;
+  --radius:14px;
+  --shadow:0 4px 20px rgba(0,0,0,0.06);
+  --transition:0.3s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:17px;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* Preloader */
+.preloader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s}
+.preloader.hidden{opacity:0;pointer-events:none}
+.preloader svg{width:64px;height:64px;animation:spin 2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Header */
+.header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;transition:background var(--transition),box-shadow var(--transition)}
+.header.scrolled{background:var(--surface);box-shadow:var(--shadow)}
+.container{width:92%;max-width:1200px;margin:0 auto}
+.header .container{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;color:var(--primary)}
+.logo svg{width:28px;height:28px;flex-shrink:0}
+.nav{display:flex;gap:32px;align-items:center}
+.nav a{font-size:15px;color:var(--text);transition:color var(--transition);position:relative}
+.nav a:hover{color:var(--primary)}
+.nav a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width var(--transition)}
+.nav a:hover::after{width:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.btn-accent{background:var(--accent);color:var(--text)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-outline{border:2px solid var(--primary);color:var(--primary);background:transparent}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.burger span{display:block;width:26px;height:2px;background:var(--text);transition:.3s}
+.burger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.active span:nth-child(2){opacity:0}
+.burger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:20px;font-weight:500}
+.mobile-nav .btn-accent{margin-top:12px}
+
+/* Hero */
+.hero{padding:160px 0 100px;position:relative;overflow:hidden;text-align:center}
+.hero h1{font-size:clamp(32px,4.5vw,48px);font-weight:800;line-height:1.2;max-width:800px;margin:0 auto 16px}
+.hero p{font-size:clamp(18px,2vw,21px);color:var(--text-secondary);max-width:640px;margin:0 auto}
+
+/* History */
+.history{padding:80px 0}
+.history-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.history-text h2{font-size:clamp(26px,3vw,34px);font-weight:700;margin-bottom:20px}
+.history-text p{color:var(--text-secondary);font-size:17px;margin-bottom:16px;line-height:1.7}
+.history-visual{display:flex;flex-direction:column;gap:20px}
+.history-card{background:var(--surface);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);border-left:4px solid var(--accent)}
+.history-card h3{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--primary)}
+.history-card p{font-size:15px;color:var(--text-secondary)}
+
+/* Mission */
+.mission{padding:80px 0;background:var(--surface);text-align:center}
+.mission h2{font-size:clamp(26px,3vw,34px);font-weight:700;margin-bottom:20px}
+.mission blockquote{font-size:clamp(18px,2.5vw,24px);color:var(--text-secondary);max-width:800px;margin:0 auto;line-height:1.6;font-style:italic;position:relative;padding:0 20px}
+.mission blockquote::before{content:"“";font-size:60px;color:var(--accent);position:absolute;top:-20px;left:-10px;font-style:normal}
+
+/* Stats */
+.stats{padding:60px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-number{font-size:clamp(32px,4vw,48px);font-weight:800;color:var(--primary);line-height:1}
+.stat-label{font-size:15px;color:var(--text-secondary);margin-top:8px}
+
+/* Values */
+.values{padding:80px 0}
+.values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.value{background:var(--surface);border-radius:var(--radius);padding:32px;text-align:center;box-shadow:var(--shadow);transition:transform var(--transition)}
+.value:hover{transform:translateY(-6px)}
+.value-icon{width:56px;height:56px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:26px}
+.value h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.value p{font-size:15px;color:var(--text-secondary);line-height:1.55}
+
+/* Team */
+.team{padding:80px 0;background:var(--surface)}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.member{background:var(--bg);border-radius:var(--radius);padding:24px;text-align:center;transition:transform var(--transition)}
+.member:hover{transform:translateY(-4px)}
+.member-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--secondary),var(--primary));margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700}
+.member h4{font-size:18px;font-weight:700;margin-bottom:4px}
+.member p{font-size:14px;color:var(--text-secondary)}
+
+/* CTA */
+.cta{padding:80px 0;text-align:center;background:linear-gradient(135deg,var(--primary) 0%,#1e3d30 100%);color:#fff}
+.cta h2{font-size:clamp(26px,3vw,36px);font-weight:700;margin-bottom:16px}
+.cta p{font-size:18px;opacity:.9;max-width:600px;margin:0 auto 28px}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* Footer */
+.footer{background:var(--text);color:#fff;padding:60px 0 24px}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:40px}
+.footer h4{font-size:16px;font-weight:700;margin-bottom:16px;opacity:.9}
+.footer a{display:block;font-size:15px;color:rgba(255,255,255,.65);margin-bottom:10px;transition:color var(--transition)}
+.footer a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:14px;color:rgba(255,255,255,.55)}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* Responsive */
+@media (max-width:1024px){
+  .history-grid{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:repeat(2,1fr)}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:768px){
+  .nav{display:none}
+  .burger{display:flex}
+  .hero{padding:130px 0 70px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px 16px}
+  .values-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .cta-buttons{flex-direction:column;align-items:center}
+  .cta-buttons .btn{width:100%;max-width:320px;justify-content:center}
+}
+@media (max-width:480px){
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="preloader" id="preloader">
+  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M32 4C32 4 20 16 20 28C20 36 25 42 32 42C39 42 44 36 44 28C44 16 32 4 32 4Z" stroke="#2D5A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 42V60" stroke="#7A9E8E" stroke-width="3" stroke-linecap="round"/>
+    <path d="M24 52C24 52 28 56 32 56C36 56 40 52 40 52" stroke="#E8B4B8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="24" r="4" fill="#E8B4B8"/>
+  </svg>
+</div>
+
+<header class="header" id="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C12 2 6 8 6 14C6 18 9 21 12 21C15 21 18 18 18 14C18 8 12 2 12 2Z"/>
+        <path d="M12 21V22"/>
+        <path d="M12 14C13.6569 14 15 12.6569 15 11C15 9.34315 13.6569 8 12 8C10.3431 8 9 9.34315 9 11C9 12.6569 10.3431 14 12 14Z"/>
+      </svg>
+      BloomDesk
+    </a>
+    <nav class="nav">
+      <a href="index.html#features">О продукте</a>
+      <a href="index.html#features">Возможности</a>
+      <a href="about.html">О компании</a>
+      <a href="careers.html">Работа у нас</a>
+      <a href="index.html#footer">Контакты</a>
+      <a href="index.html#cta" class="btn btn-accent">Попробовать демо</a>
+    </nav>
+    <div class="burger" id="burger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#features" onclick="toggleMenu()">О продукте</a>
+  <a href="index.html#features" onclick="toggleMenu()">Возможности</a>
+  <a href="about.html" onclick="toggleMenu()">О компании</a>
+  <a href="careers.html" onclick="toggleMenu()">Работа у нас</a>
+  <a href="index.html#footer" onclick="toggleMenu()">Контакты</a>
+  <a href="index.html#cta" class="btn btn-accent" onclick="toggleMenu()">Попробовать демо</a>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <h1 class="reveal">Мы создаём инструмент для тех, кто создаёт красоту</h1>
+    <p class="reveal">BloomDesk — это 35 человек, одна идея и тысячи цветочных магазинов, которые работают по-другому.</p>
+  </div>
+</section>
+
+<section class="history">
+  <div class="container">
+    <div class="history-grid">
+      <div class="history-text reveal">
+        <h2>История</h2>
+        <p>В 2020 году трое друзей заметили, как цветочный магазин на соседней улице ведёт заказы в тетради. Они предложили простую таблицу в Google Sheets. Через месяц поняли: нужен настоящий продукт.</p>
+        <p>В 2022 году к нам присоединились первые 100 клиентов. Мы наняли первых флористов-консультантов, чтобы продукт решал реальные задачи, а не те, что мы придумали.</p>
+        <p>В 2024 году на платформе работают более 1200 магазинов в 60+ городах. Мы остаёмся небольшой командой, но делаем аккуратный, надёжный инструмент.</p>
+      </div>
+      <div class="history-visual">
+        <div class="history-card reveal">
+          <h3>2020</h3>
+          <p>Идея родилась из наблюдения за реальной работой цветочного магазина.</p>
+        </div>
+        <div class="history-card reveal">
+          <h3>2022</h3>
+          <p>Первые 100 клиентов. Начали нанимать людей из индустрии.</p>
+        </div>
+        <div class="history-card reveal">
+          <h3>2024</h3>
+          <p>1200+ магазинов, 60+ городов, стабильная команда из 35 человек.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mission">
+  <div class="container">
+    <h2 class="reveal">Миссия</h2>
+    <blockquote class="reveal">Сделать так, чтобы небольшой цветочный бизнес мог конкурировать с сетевыми магазинами за счёт порядка внутри.</blockquote>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="reveal"><div class="stat-number">35</div><div class="stat-label">сотрудников</div></div>
+      <div class="reveal"><div class="stat-number">1 200+</div><div class="stat-label">клиентов</div></div>
+      <div class="reveal"><div class="stat-number">60+</div><div class="stat-label">городов</div></div>
+      <div class="reveal"><div class="stat-number">4 года</div><div class="stat-label">на рынке</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="values">
+  <div class="container">
+    <div style="text-align:center;max-width:700px;margin:0 auto 60px" class="reveal">
+      <h2 style="font-size:clamp(28px,3.5vw,40px);font-weight:700;margin-bottom:12px">Ценности</h2>
+      <p style="color:var(--text-secondary);font-size:18px">То, что не меняется, когда всё вокруг растёт</p>
+    </div>
+    <div class="values-grid">
+      <div class="value reveal">
+        <div class="value-icon">📋</div>
+        <h3>Порядок</h3>
+        <p>Хаос творчества должен оставаться в букетах, а не в документах.</p>
+      </div>
+      <div class="value reveal">
+        <div class="value-icon">🤝</div>
+        <h3>Забота</h3>
+        <p>Мы относимся к клиентам как к партнёрам, а не как к пользователям.</p>
+      </div>
+      <div class="value reveal">
+        <div class="value-icon">✨</div>
+        <h3>Простота</h3>
+        <p>Сложные задачи решаются простым интерфейсом. Без обучения в неделю.</p>
+      </div>
+      <div class="value reveal">
+        <div class="value-icon">🏔️</div>
+        <h3>Стабильность</h3>
+        <p>Мы не гонимся за хайпом. Делаем продукт, на который можно положиться.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="team">
+  <div class="container">
+    <div style="text-align:center;max-width:700px;margin:0 auto 60px" class="reveal">
+      <h2 style="font-size:clamp(28px,3.5vw,40px);font-weight:700;margin-bottom:12px">Команда</h2>
+      <p style="color:var(--text-secondary);font-size:18px">Люди, которые делают BloomDesk каждый день</p>
+    </div>
+    <div class="team-grid">
+      <div class="member reveal">
+        <div class="member-avatar">АК</div>
+        <h4>Алексей К.</h4>
+        <p>Основатель и CEO</p>
+      </div>
+      <div class="member reveal">
+        <div class="member-avatar">МС</div>
+        <h4>Марина С.</h4>
+        <p>Руководитель продукта</p>
+      </div>
+      <div class="member reveal">
+        <div class="member-avatar">ИП</div>
+        <h4>Иван П.</h4>
+        <p>Главный разработчик</p>
+      </div>
+      <div class="member reveal">
+        <div class="member-avatar">ДВ</div>
+        <h4>Дарья В.</h4>
+        <p>Руководитель поддержки</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2 class="reveal">Станьте частью BloomDesk</h2>
+    <p class="reveal">Попробуйте платформу или присоединитесь к команде.</p>
+    <div class="cta-buttons reveal">
+      <a href="index.html#cta" class="btn btn-accent">Стать клиентом</a>
+      <a href="careers.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.5)">Присоединиться к команде</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>Продукт</h4><a href="index.html#features">Возможности</a><a href="#">Тарифы</a><a href="index.html#cta">Демо</a></div>
+      <div><h4>Компания</h4><a href="about.html">О нас</a><a href="#">Блог</a><a href="#footer">Контакты</a></div>
+      <div><h4>Работа</h4><a href="careers.html">Вакансии</a></div>
+      <div><h4>Контакты</h4><a href="mailto:hello@bloomdesk.ru">hello@bloomdesk.ru</a><a href="tel:+78001234567">+7 (800) 123-45-67</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© BloomDesk, 2024. ООО «БлумДеск».</span>
+      <a href="#">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('preloader').classList.add('hidden'),600)});
+const header=document.getElementById('header');
+window.addEventListener('scroll',()=>{if(window.scrollY>40)header.classList.add('scrolled');else header.classList.remove('scrolled');});
+function toggleMenu(){document.getElementById('burger').classList.toggle('active');document.getElementById('mobileNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';}
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>

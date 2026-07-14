@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BloomDesk — умная платформа для автоматизации цветочных магазинов, студий флористики и декораторов. Заказы, склад, доставка, отчётность в одном окне.">
+<meta property="og:title" content="BloomDesk — платформа для цветочного бизнеса">
+<meta property="og:description" content="Замените блокноты и Excel. Принимайте заказы, ведите склад, считайте себестоимость и планируйте доставки.">
+<meta property="og:type" content="website">
+<title>BloomDesk — умная платформа для вашего цветочного бизнеса</title>
+<style>
+:root{
+  --primary:#2D5A4A;
+  --secondary:#7A9E8E;
+  --accent:#E8B4B8;
+  --bg:#FAF7F2;
+  --surface:#FFFFFF;
+  --text:#2C3E33;
+  --text-secondary:#6B7B73;
+  --radius:14px;
+  --shadow:0 4px 20px rgba(0,0,0,0.06);
+  --transition:0.3s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:17px;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+ul{list-style:none}
+
+/* Preloader */
+.preloader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s}
+.preloader.hidden{opacity:0;pointer-events:none}
+.preloader svg{width:64px;height:64px;animation:spin 2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Header */
+.header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;transition:background var(--transition),box-shadow var(--transition)}
+.header.scrolled{background:var(--surface);box-shadow:var(--shadow)}
+.container{width:92%;max-width:1200px;margin:0 auto}
+.header .container{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;color:var(--primary)}
+.logo svg{width:28px;height:28px;flex-shrink:0}
+.nav{display:flex;gap:32px;align-items:center}
+.nav a{font-size:15px;color:var(--text);transition:color var(--transition);position:relative}
+.nav a:hover{color:var(--primary)}
+.nav a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width var(--transition)}
+.nav a:hover::after{width:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.btn-accent{background:var(--accent);color:var(--text)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-outline{border:2px solid var(--primary);color:var(--primary);background:transparent}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.burger span{display:block;width:26px;height:2px;background:var(--text);transition:.3s}
+.burger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.active span:nth-child(2){opacity:0}
+.burger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:20px;font-weight:500}
+.mobile-nav .btn-accent{margin-top:12px}
+
+/* Hero */
+.hero{padding:160px 0 100px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-bg svg{position:absolute;opacity:.12}
+.hero-bg .leaf1{top:10%;left:-5%;width:300px;height:300px;color:var(--secondary)}
+.hero-bg .leaf2{bottom:5%;right:-8%;width:360px;height:360px;color:var(--accent)}
+.hero-bg .flower{top:20%;right:10%;width:140px;height:140px;color:var(--primary);opacity:.08}
+.hero .container{position:relative;z-index:2}
+.hero h1{font-size:clamp(36px,5vw,56px);font-weight:800;line-height:1.15;max-width:800px;margin-bottom:20px;color:var(--text)}
+.hero p{font-size:clamp(18px,2vw,21px);color:var(--text-secondary);max-width:640px;margin-bottom:36px}
+.hero-buttons{display:flex;gap:16px;flex-wrap:wrap}
+
+/* Stats */
+.stats{padding:60px 0;background:var(--surface)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-number{font-size:clamp(32px,4vw,48px);font-weight:800;color:var(--primary);line-height:1}
+.stat-label{font-size:15px;color:var(--text-secondary);margin-top:8px}
+
+/* Steps */
+.steps{padding:100px 0}
+.section-header{text-align:center;max-width:700px;margin:0 auto 60px}
+.section-header h2{font-size:clamp(28px,3.5vw,40px);font-weight:700;margin-bottom:12px}
+.section-header p{color:var(--text-secondary);font-size:18px}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.step{background:var(--surface);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);transition:transform var(--transition)}
+.step:hover{transform:translateY(-6px)}
+.step-icon{width:56px;height:56px;border-radius:14px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:28px}
+.step h3{font-size:20px;font-weight:700;margin-bottom:10px}
+.step p{font-size:15px;color:var(--text-secondary);line-height:1.55}
+
+/* Features */
+.features{padding:80px 0;background:var(--surface)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.feature{background:var(--bg);border-radius:var(--radius);padding:32px;transition:transform var(--transition),box-shadow var(--transition)}
+.feature:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.feature-icon{width:48px;height:48px;margin-bottom:18px;color:var(--primary)}
+.feature h3{font-size:20px;font-weight:700;margin-bottom:10px}
+.feature p{font-size:15px;color:var(--text-secondary);line-height:1.6}
+
+/* About block */
+.about-block{padding:100px 0}
+.about-block .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-text h2{font-size:clamp(28px,3vw,38px);font-weight:700;margin-bottom:20px;line-height:1.25}
+.about-text p{color:var(--text-secondary);font-size:17px;margin-bottom:20px;line-height:1.7}
+.about-visual{position:relative}
+.about-visual .card{background:var(--surface);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);max-width:320px;margin-left:auto;position:relative;z-index:2}
+.about-visual .card h4{font-size:18px;margin-bottom:8px;color:var(--primary)}
+.about-visual .card p{font-size:14px;color:var(--text-secondary)}
+.about-visual .decoration{position:absolute;top:-20px;left:-20px;width:200px;height:200px;background:var(--accent);border-radius:50%;opacity:.25;z-index:1}
+
+/* Testimonials */
+.testimonials{padding:80px 0;background:var(--surface)}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testimonial{background:var(--bg);border-radius:var(--radius);padding:32px;position:relative;transition:transform var(--transition)}
+.testimonial:hover{transform:translateY(-4px)}
+.testimonial q{display:block;font-size:17px;line-height:1.6;margin-bottom:20px;color:var(--text);font-style:italic}
+.testimonial footer{font-size:15px;color:var(--text-secondary)}
+.testimonial footer strong{color:var(--primary);display:block;margin-bottom:2px;font-style:normal}
+
+/* CTA */
+.cta{padding:100px 0;text-align:center;background:linear-gradient(135deg,var(--primary) 0%,#1e3d30 100%);color:#fff;position:relative;overflow:hidden}
+.cta h2{font-size:clamp(28px,3.5vw,40px);font-weight:700;margin-bottom:12px}
+.cta p{font-size:18px;opacity:.9;max-width:600px;margin:0 auto 32px}
+.cta-form{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:520px;margin:0 auto}
+.cta-form input{padding:14px 20px;border-radius:var(--radius);border:none;font-size:16px;flex:1;min-width:240px;outline:none}
+.cta-form input:focus{box-shadow:0 0 0 3px rgba(232,180,184,.5)}
+.cta .btn-accent{color:var(--text);font-weight:700}
+
+/* Careers teaser */
+.careers-teaser{padding:80px 0}
+.careers-teaser .container{background:var(--surface);border-radius:var(--radius);padding:48px 60px;display:flex;align-items:center;justify-content:space-between;gap:40px;box-shadow:var(--shadow);flex-wrap:wrap}
+.careers-teaser h2{font-size:28px;font-weight:700;margin-bottom:8px}
+.careers-teaser p{color:var(--text-secondary);font-size:17px;max-width:520px}
+
+/* Footer */
+.footer{background:var(--text);color:#fff;padding:60px 0 24px}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:40px}
+.footer h4{font-size:16px;font-weight:700;margin-bottom:16px;opacity:.9}
+.footer a{display:block;font-size:15px;color:rgba(255,255,255,.65);margin-bottom:10px;transition:color var(--transition)}
+.footer a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:14px;color:rgba(255,255,255,.55)}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* Responsive */
+@media (max-width:1024px){
+  .steps-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .about-block .container{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .nav{display:none}
+  .burger{display:flex}
+  .hero{padding:130px 0 70px}
+  .hero-buttons{flex-direction:column}
+  .hero-buttons .btn{width:100%;justify-content:center}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px 16px}
+  .steps-grid{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+  .about-block .container{grid-template-columns:1fr}
+  .about-visual .card{margin-left:0}
+  .careers-teaser .container{flex-direction:column;text-align:center;padding:36px 28px}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .cta-form{flex-direction:column}
+  .cta-form input{width:100%}
+}
+@media (max-width:480px){
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M32 4C32 4 20 16 20 28C20 36 25 42 32 42C39 42 44 36 44 28C44 16 32 4 32 4Z" stroke="#2D5A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 42V60" stroke="#7A9E8E" stroke-width="3" stroke-linecap="round"/>
+    <path d="M24 52C24 52 28 56 32 56C36 56 40 52 40 52" stroke="#E8B4B8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="24" r="4" fill="#E8B4B8"/>
+  </svg>
+</div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C12 2 6 8 6 14C6 18 9 21 12 21C15 21 18 18 18 14C18 8 12 2 12 2Z"/>
+        <path d="M12 21V22"/>
+        <path d="M12 14C13.6569 14 15 12.6569 15 11C15 9.34315 13.6569 8 12 8C10.3431 8 9 9.34315 9 11C9 12.6569 10.3431 14 12 14Z"/>
+      </svg>
+      BloomDesk
+    </a>
+    <nav class="nav">
+      <a href="#features">О продукте</a>
+      <a href="#features">Возможности</a>
+      <a href="about.html">О компании</a>
+      <a href="careers.html">Работа у нас</a>
+      <a href="#footer">Контакты</a>
+      <a href="#cta" class="btn btn-accent">Попробовать демо</a>
+    </nav>
+    <div class="burger" id="burger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#features" onclick="toggleMenu()">О продукте</a>
+  <a href="#features" onclick="toggleMenu()">Возможности</a>
+  <a href="about.html" onclick="toggleMenu()">О компании</a>
+  <a href="careers.html" onclick="toggleMenu()">Работа у нас</a>
+  <a href="#footer" onclick="toggleMenu()">Контакты</a>
+  <a href="#cta" class="btn btn-accent" onclick="toggleMenu()">Попробовать демо</a>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <svg class="leaf1" viewBox="0 0 200 200" fill="currentColor"><path d="M100 180C100 180 20 140 20 80C20 40 60 10 100 10C140 10 180 40 180 80C180 140 100 180 100 180Z" opacity="0.3"/></svg>
+    <svg class="leaf2" viewBox="0 0 200 200" fill="currentColor"><path d="M100 180C100 180 20 140 20 80C20 40 60 10 100 10C140 10 180 40 180 80C180 140 100 180 100 180Z" opacity="0.3"/></svg>
+    <svg class="flower" viewBox="0 0 100 100" fill="currentColor"><path d="M50 50C50 50 30 30 30 50C30 60 40 70 50 70C60 70 70 60 70 50C70 30 50 50 50 50Z"/><circle cx="50" cy="50" r="10"/></svg>
+  </div>
+  <div class="container">
+    <h1>BloomDesk — умная платформа для вашего цветочного бизнеса</h1>
+    <p>Замените блокноты и Excel. Принимайте заказы, ведите склад, считайте себестоимость и планируйте доставки в одном окне.</p>
+    <div class="hero-buttons">
+      <a href="#cta" class="btn btn-accent">Получить демо-доступ</a>
+      <a href="#steps" class="btn btn-outline">Как это работает</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="reveal">
+        <div class="stat-number">1 200+</div>
+        <div class="stat-label">цветочных магазинов на платформе</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number">4 года</div>
+        <div class="stat-label">развиваем продукт</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number">60+</div>
+        <div class="stat-label">городов присутствия</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">клиентов рекомендуют BloomDesk</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="steps" id="steps">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Как это работает</h2>
+      <p>Четыре простых шага от заказа до отчёта</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-icon">🌱</div>
+        <h3>Принимаете заказ</h3>
+        <p>Клиент оформляет заявку на сайте или по телефону, вы фиксируете в системе.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-icon">🌿</div>
+        <h3>Считаете себестоимость</h3>
+        <p>Платформа автоматически подсчитывает стоимость цветов, упаковки и работы.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-icon">🌸</div>
+        <h3>Готовите букет</h3>
+        <p>Видите очередь заказов, сроки, доставки. Ничего не теряется.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-icon">🌺</div>
+        <h3>Сдаёте и отчитываетесь</h3>
+        <p>Печатаете этикетки, отмечаете выполнение, строите отчёт за день.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Возможности</h2>
+      <p>Всё, что нужно для порядка в цветочном бизнесе</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h3>Учёт заказов</h3>
+        <p>От приёма до выдачи. Предзаказы к праздникам, статусы, напоминания.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <h3>Склад и остатки</h3>
+        <p>Свежий товар, упаковка, расходники. Автоматический списание при сборке.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h3>Себестоимость</h3>
+        <p>Точный расчёт каждого букета и оформления. Маржинальность в один клик.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <h3>Доставка и самовывоз</h3>
+        <p>Маршруты, слоты, уведомления клиентам. Интеграция с курьерскими службами.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <h3>Отчётность</h3>
+        <p>Продажи, остатки, прибыль по дням и месяцам. Выгрузка в Excel.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Команда</h3>
+        <p>Права доступа для флористов, менеджеров и курьеров. Роли и ограничения.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About block -->
+<section class="about-block" id="about">
+  <div class="container">
+    <div class="about-text reveal">
+      <h2>Мы делаем один продукт — но делаем его хорошо</h2>
+      <p>BloomDesk родился в 2020 году, когда команда из трёх человек увидела, как цветочный магазин ведёт заказы в тетради. Сегодня мы — 35 человек, которые создают SaaS для небольших цветочных бизнесов по всей России.</p>
+      <p>Мы не стремимся стать всем для всех. Мы делаем аккуратный, понятный инструмент для тех, кто продаёт красоту.</p>
+      <a href="about.html" class="btn btn-outline" style="margin-top:8px">Подробнее о нас</a>
+    </div>
+    <div class="about-visual reveal">
+      <div class="decoration"></div>
+      <div class="card">
+        <h4>Наша философия</h4>
+        <p>Порядок внутри — конкурентное преимущество снаружи. Мы верим, что небольшой цветочный бизнес может работать без стресса.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Отзывы клиентов</h2>
+      <p>Что говорят цветочные магазины о BloomDesk</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial reveal">
+        <q>BloomDesk избавил нас от хаоса перед 8 Марта. Все предзаказы видны, ничего не забывается.</q>
+        <footer><strong>Анна</strong>«Лаванда», Самара</footer>
+      </div>
+      <div class="testimonial reveal">
+        <q>Раньше считали себестоимость на калькуляторе. Теперь платформа считает сама, ошибок нет.</q>
+        <footer><strong>Дмитрий</strong>«Цветочный двор», Краснодар</footer>
+      </div>
+      <div class="testimonial reveal">
+        <q>Внедрили за день. Менеджер разобрался без IT-шника.</q>
+        <footer><strong>Ольга</strong>Студия флористики, Москва</footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="container">
+    <h2 class="reveal">Попробуйте BloomDesk бесплатно</h2>
+    <p class="reveal">14 дней демо-доступа. Настроим импорт, покажем функции, ответим на вопросы.</p>
+    <form class="cta-form reveal" onsubmit="event.preventDefault();alert('Спасибо! Мы свяжемся с вами в течение рабочего дня.');">
+      <input type="email" placeholder="Ваш email" required>
+      <button type="submit" class="btn btn-accent">Подключить демо</button>
+    </form>
+  </div>
+</section>
+
+<!-- Careers teaser -->
+<section class="careers-teaser" id="careers">
+  <div class="container reveal">
+    <div>
+      <h2>Присоединяйтесь к команде BloomDesk</h2>
+      <p>Мы растём и ищем операторов чат-поддержки. Спокойная удалённая работа без продаж и звонков.</p>
+    </div>
+    <a href="careers.html" class="btn btn-primary">Смотреть вакансию</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Продукт</h4>
+        <a href="#features">Возможности</a>
+        <a href="#">Тарифы</a>
+        <a href="#cta">Демо</a>
+      </div>
+      <div>
+        <h4>Компания</h4>
+        <a href="about.html">О нас</a>
+        <a href="#">Блог</a>
+        <a href="#footer">Контакты</a>
+      </div>
+      <div>
+        <h4>Работа</h4>
+        <a href="careers.html">Вакансии</a>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <a href="mailto:hello@bloomdesk.ru">hello@bloomdesk.ru</a>
+        <a href="tel:+78001234567">+7 (800) 123-45-67</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© BloomDesk, 2024. ООО «БлумДеск».</span>
+      <a href="#">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Preloader
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('preloader').classList.add('hidden'),600)});
+
+// Header scroll
+const header=document.getElementById('header');
+window.addEventListener('scroll',()=>{if(window.scrollY>40)header.classList.add('scrolled');else header.classList.remove('scrolled');});
+
+// Mobile menu
+function toggleMenu(){document.getElementById('burger').classList.toggle('active');document.getElementById('mobileNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';}
+
+// Reveal on scroll
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
