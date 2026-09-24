@@ -98,7 +98,7 @@
     const calculator = document.querySelector("[data-orders-calculator]");
     if (!calculator) return;
 
-    const hourlyRate = 500;
+    const hourlyRate = 415;
     const daysSelect = calculator.querySelector("[data-orders-days]");
     const dayHoursContainer = calculator.querySelector("[data-day-hours]");
     const selectedDay = calculator.querySelector("[data-selected-day]");
@@ -117,6 +117,7 @@
       25: [5, 5, 5, 5, 5],
       26: [6, 5, 5, 5, 5],
       30: [6, 6, 6, 6, 6],
+      31: [7, 6, 6, 6, 6],
       40: [8, 8, 8, 8, 8]
     };
 
@@ -170,8 +171,8 @@
       monthlyOutput.textContent = formatRubles(monthlyIncome);
       formulaOutput.textContent = `${weeklyHours.toLocaleString("ru-RU")} ч × ${hourlyRate} ₽ × 52 / 12`;
 
-      const reachesReference = weeklyHours >= 26;
-      const nearReference = weeklyHours === 25;
+      const reachesReference = weeklyHours >= 31;
+      const nearReference = weeklyHours === 30;
       incomeNote.classList.toggle("is-main-load", reachesReference || nearReference);
       incomeNote.textContent = reachesReference
         ? "Выбранная загрузка достигает или превышает ориентир около 55 000 ₽ в месяц."
@@ -224,7 +225,7 @@
       button.addEventListener("click", () => applyPreset(Number(button.dataset.weeklyPreset)));
     });
 
-    applyPreset(25);
+    applyPreset(31);
   };
 
   const setupOrderDemo = () => {
