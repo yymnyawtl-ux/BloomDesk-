@@ -1315,6 +1315,13 @@ ul {
   line-height: 1.65;
 }
 
+.job-context a {
+  color: var(--primary);
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .conditions-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2259,6 +2266,13 @@ ul {
 .transparency-note p {
   color: rgba(255, 255, 255, 0.68);
   font-size: 14px;
+}
+
+.transparency-note a {
+  color: #fff;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .application-panel--orders {
