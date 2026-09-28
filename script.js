@@ -54,6 +54,134 @@
   const formatRubles = (value) =>
     Math.round(value).toLocaleString("ru-RU") + " ₽";
 
+  const setupProductGallery = () => {
+    const gallery = document.querySelector("[data-product-gallery]");
+    if (!gallery) return;
+
+    const tabs = [...gallery.querySelectorAll("[data-product-tab]")];
+    const image = gallery.querySelector("[data-product-image]");
+    const label = gallery.querySelector("[data-product-label]");
+    const title = gallery.querySelector("[data-product-title]");
+    const description = gallery.querySelector("[data-product-description]");
+    const counter = gallery.querySelector("[data-product-counter]");
+    const mediaButton = gallery.querySelector(".product-gallery-media");
+    const lightbox = document.querySelector("[data-product-lightbox]");
+    const lightboxImage = lightbox?.querySelector("[data-lightbox-image]");
+    const lightboxLabel = lightbox?.querySelector("[data-lightbox-label]");
+    const lightboxTitle = lightbox?.querySelector("[data-lightbox-title]");
+    let activeIndex = 0;
+    let requestId = 0;
+    let lastZoomTrigger = null;
+
+    const syncLightbox = (tab) => {
+      if (!lightbox || !lightboxImage || !lightboxLabel || !lightboxTitle) return;
+      lightboxImage.src = tab.dataset.image;
+      lightboxImage.alt = tab.dataset.alt;
+      lightboxLabel.textContent = tab.dataset.label;
+      lightboxTitle.textContent = tab.dataset.title;
+    };
+
+    const renderTab = (index, shouldFocus = false) => {
+      const tab = tabs[index];
+      if (!tab) return;
+
+      activeIndex = index;
+      requestId += 1;
+      const currentRequest = requestId;
+      let finished = false;
+      gallery.classList.add("is-switching");
+
+      const finish = () => {
+        if (finished || currentRequest !== requestId) return;
+        finished = true;
+        image.src = tab.dataset.image;
+        image.alt = tab.dataset.alt;
+        label.textContent = tab.dataset.label;
+        title.textContent = tab.dataset.title;
+        description.textContent = tab.dataset.description;
+        counter.textContent = tab.dataset.counter;
+        mediaButton.setAttribute("aria-label", `Открыть экран «${tab.textContent.trim()}» крупно`);
+        tabs.forEach((item, itemIndex) => {
+          const isActive = itemIndex === index;
+          item.classList.toggle("is-active", isActive);
+          item.setAttribute("aria-selected", String(isActive));
+          item.tabIndex = isActive ? 0 : -1;
+        });
+        syncLightbox(tab);
+        gallery.classList.remove("is-switching");
+        if (shouldFocus) tab.focus();
+      };
+
+      const preloadedImage = new Image();
+      preloadedImage.addEventListener("load", finish, { once: true });
+      preloadedImage.addEventListener("error", finish, { once: true });
+      preloadedImage.src = tab.dataset.image;
+      if (preloadedImage.complete) finish();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => renderTab(index));
+      tab.addEventListener("keydown", (event) => {
+        let nextIndex = null;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = tabs.length - 1;
+        if (nextIndex === null) return;
+        event.preventDefault();
+        renderTab(nextIndex, true);
+      });
+    });
+
+    gallery.querySelectorAll("[data-product-zoom]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!lightbox) return;
+        lastZoomTrigger = button;
+        syncLightbox(tabs[activeIndex]);
+        lightbox.showModal();
+      });
+    });
+
+    lightbox?.querySelector("[data-lightbox-close]")?.addEventListener("click", () => lightbox.close());
+    lightbox?.addEventListener("click", (event) => {
+      if (event.target === lightbox) lightbox.close();
+    });
+    lightbox?.addEventListener("close", () => lastZoomTrigger?.focus());
+  };
+
+  const setupScrollReveal = () => {
+    const elements = [...document.querySelectorAll(".scroll-reveal")];
+    if (!elements.length) return;
+
+    document.documentElement.classList.add("has-motion");
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -8%", threshold: 0.12 });
+
+    elements.forEach((element) => observer.observe(element));
+  };
+
+  const setupFaq = () => {
+    const items = [...document.querySelectorAll(".faq-item")];
+    items.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        items.forEach((otherItem) => {
+          if (otherItem !== item) otherItem.open = false;
+        });
+      });
+    });
+  };
+
   const setupSupportCalculator = () => {
     const calculator = document.querySelector("[data-support-calculator]");
     if (!calculator) return;
@@ -305,6 +433,9 @@
     reset();
   };
 
+  setupProductGallery();
+  setupScrollReveal();
+  setupFaq();
   setupSupportCalculator();
   setupOrdersCalculator();
   setupOrderDemo();
