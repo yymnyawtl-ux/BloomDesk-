@@ -54,134 +54,6 @@
   const formatRubles = (value) =>
     Math.round(value).toLocaleString("ru-RU") + " ₽";
 
-  const setupProductGallery = () => {
-    const gallery = document.querySelector("[data-product-gallery]");
-    if (!gallery) return;
-
-    const tabs = [...gallery.querySelectorAll("[data-product-tab]")];
-    const image = gallery.querySelector("[data-product-image]");
-    const label = gallery.querySelector("[data-product-label]");
-    const title = gallery.querySelector("[data-product-title]");
-    const description = gallery.querySelector("[data-product-description]");
-    const counter = gallery.querySelector("[data-product-counter]");
-    const mediaButton = gallery.querySelector(".product-gallery-media");
-    const lightbox = document.querySelector("[data-product-lightbox]");
-    const lightboxImage = lightbox?.querySelector("[data-lightbox-image]");
-    const lightboxLabel = lightbox?.querySelector("[data-lightbox-label]");
-    const lightboxTitle = lightbox?.querySelector("[data-lightbox-title]");
-    let activeIndex = 0;
-    let requestId = 0;
-    let lastZoomTrigger = null;
-
-    const syncLightbox = (tab) => {
-      if (!lightbox || !lightboxImage || !lightboxLabel || !lightboxTitle) return;
-      lightboxImage.src = tab.dataset.image;
-      lightboxImage.alt = tab.dataset.alt;
-      lightboxLabel.textContent = tab.dataset.label;
-      lightboxTitle.textContent = tab.dataset.title;
-    };
-
-    const renderTab = (index, shouldFocus = false) => {
-      const tab = tabs[index];
-      if (!tab) return;
-
-      activeIndex = index;
-      requestId += 1;
-      const currentRequest = requestId;
-      let finished = false;
-      gallery.classList.add("is-switching");
-
-      const finish = () => {
-        if (finished || currentRequest !== requestId) return;
-        finished = true;
-        image.src = tab.dataset.image;
-        image.alt = tab.dataset.alt;
-        label.textContent = tab.dataset.label;
-        title.textContent = tab.dataset.title;
-        description.textContent = tab.dataset.description;
-        counter.textContent = tab.dataset.counter;
-        mediaButton.setAttribute("aria-label", `Открыть экран «${tab.textContent.trim()}» крупно`);
-        tabs.forEach((item, itemIndex) => {
-          const isActive = itemIndex === index;
-          item.classList.toggle("is-active", isActive);
-          item.setAttribute("aria-selected", String(isActive));
-          item.tabIndex = isActive ? 0 : -1;
-        });
-        syncLightbox(tab);
-        gallery.classList.remove("is-switching");
-        if (shouldFocus) tab.focus();
-      };
-
-      const preloadedImage = new Image();
-      preloadedImage.addEventListener("load", finish, { once: true });
-      preloadedImage.addEventListener("error", finish, { once: true });
-      preloadedImage.src = tab.dataset.image;
-      if (preloadedImage.complete) finish();
-    };
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => renderTab(index));
-      tab.addEventListener("keydown", (event) => {
-        let nextIndex = null;
-        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
-        if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
-        if (event.key === "Home") nextIndex = 0;
-        if (event.key === "End") nextIndex = tabs.length - 1;
-        if (nextIndex === null) return;
-        event.preventDefault();
-        renderTab(nextIndex, true);
-      });
-    });
-
-    gallery.querySelectorAll("[data-product-zoom]").forEach((button) => {
-      button.addEventListener("click", () => {
-        if (!lightbox) return;
-        lastZoomTrigger = button;
-        syncLightbox(tabs[activeIndex]);
-        lightbox.showModal();
-      });
-    });
-
-    lightbox?.querySelector("[data-lightbox-close]")?.addEventListener("click", () => lightbox.close());
-    lightbox?.addEventListener("click", (event) => {
-      if (event.target === lightbox) lightbox.close();
-    });
-    lightbox?.addEventListener("close", () => lastZoomTrigger?.focus());
-  };
-
-  const setupScrollReveal = () => {
-    const elements = [...document.querySelectorAll(".scroll-reveal")];
-    if (!elements.length) return;
-
-    document.documentElement.classList.add("has-motion");
-    if (!("IntersectionObserver" in window)) {
-      elements.forEach((element) => element.classList.add("is-visible"));
-      return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    }, { rootMargin: "0px 0px -8%", threshold: 0.12 });
-
-    elements.forEach((element) => observer.observe(element));
-  };
-
-  const setupFaq = () => {
-    const items = [...document.querySelectorAll(".faq-item")];
-    items.forEach((item) => {
-      item.addEventListener("toggle", () => {
-        if (!item.open) return;
-        items.forEach((otherItem) => {
-          if (otherItem !== item) otherItem.open = false;
-        });
-      });
-    });
-  };
-
   const setupSupportCalculator = () => {
     const calculator = document.querySelector("[data-support-calculator]");
     if (!calculator) return;
@@ -226,7 +98,8 @@
     const calculator = document.querySelector("[data-orders-calculator]");
     if (!calculator) return;
 
-    const hourlyRate = 415;
+    const dayRate = 430;
+    const nightRate = 450;
     const daysSelect = calculator.querySelector("[data-orders-days]");
     const dayHoursContainer = calculator.querySelector("[data-day-hours]");
     const selectedDay = calculator.querySelector("[data-selected-day]");
@@ -245,11 +118,14 @@
       25: [5, 5, 5, 5, 5],
       26: [6, 5, 5, 5, 5],
       30: [6, 6, 6, 6, 6],
-      31: [7, 6, 6, 6, 6],
       40: [8, 8, 8, 8, 8]
     };
 
-    const getInputs = () => [...dayHoursContainer.querySelectorAll("[data-day-hours-input]")];
+    const getRows = () => [...dayHoursContainer.querySelectorAll("[data-day-hours-row]")];
+    const readRows = () => getRows().map((row) => ({
+      day: Number(row.querySelector("[data-day-hours-day]").value) || 0,
+      night: Number(row.querySelector("[data-day-hours-night]").value) || 0
+    }));
 
     const updateSelectedDayOptions = (days, preferredIndex = 0) => {
       selectedDay.replaceChildren();
@@ -263,15 +139,16 @@
     };
 
     const calculate = () => {
-      const inputs = getInputs();
-      const values = inputs.map((input) => Number(input.value) || 0);
-      const weeklyHours = values.reduce((sum, value) => sum + value, 0);
-      const hasTooLongDay = values.some((value) => value > 12);
-      const hasNegativeDay = values.some((value) => value < 0);
+      const rows = readRows();
+      const dayHours = rows.reduce((sum, value) => sum + value.day, 0);
+      const nightHours = rows.reduce((sum, value) => sum + value.night, 0);
+      const weeklyHours = dayHours + nightHours;
+      const hasTooLongDay = rows.some((value) => value.day + value.night > 12);
+      const hasNegativeDay = rows.some((value) => value.day < 0 || value.night < 0);
 
-      inputs.forEach((input) => {
-        const invalid = Number(input.value) > 12 || Number(input.value) < 0;
-        input.setAttribute("aria-invalid", String(invalid));
+      getRows().forEach((row, index) => {
+        const invalid = rows[index].day + rows[index].night > 12 || rows[index].day < 0 || rows[index].night < 0;
+        row.querySelectorAll("input").forEach((input) => input.setAttribute("aria-invalid", String(invalid)));
       });
 
       if (hasTooLongDay) {
@@ -288,24 +165,24 @@
         error.textContent = "";
       }
 
-      const weeklyIncome = weeklyHours * hourlyRate;
+      const weeklyIncome = dayHours * dayRate + nightHours * nightRate;
       const monthlyIncome = weeklyIncome * 52 / 12;
       const selectedIndex = Number(selectedDay.value) || 0;
-      const chosenDayHours = values[selectedIndex] || 0;
+      const chosenDay = rows[selectedIndex] || { day: 0, night: 0 };
 
       weeklyHoursOutput.textContent = `${weeklyHours.toLocaleString("ru-RU")} ч`;
       weeklyIncomeOutput.textContent = formatRubles(weeklyIncome);
-      dayIncomeOutput.textContent = formatRubles(chosenDayHours * hourlyRate);
+      dayIncomeOutput.textContent = formatRubles(chosenDay.day * dayRate + chosenDay.night * nightRate);
       monthlyOutput.textContent = formatRubles(monthlyIncome);
-      formulaOutput.textContent = `${weeklyHours.toLocaleString("ru-RU")} ч × ${hourlyRate} ₽ × 52 / 12`;
+      formulaOutput.textContent = `${dayHours.toLocaleString("ru-RU")} ч × ${dayRate} ₽ + ${nightHours.toLocaleString("ru-RU")} ч × ${nightRate} ₽; недельный доход × 52 / 12`;
 
-      const reachesReference = weeklyHours >= 31;
-      const nearReference = weeklyHours === 30;
+      const reachesReference = monthlyIncome >= 55000;
+      const nearReference = monthlyIncome >= 50000 && monthlyIncome < 55000;
       incomeNote.classList.toggle("is-main-load", reachesReference || nearReference);
       incomeNote.textContent = reachesReference
         ? "Выбранная загрузка достигает или превышает ориентир около 55 000 ₽ в месяц."
         : nearReference
-          ? "Загрузка близка к среднему ориентиру около 55 000 ₽ в месяц."
+          ? "Загрузка близка к ориентиру около 55 000 ₽ в месяц."
           : "Доход рассчитывается пропорционально выбранному количеству часов.";
     };
 
@@ -316,24 +193,27 @@
       for (let index = 0; index < days; index += 1) {
         const label = document.createElement("label");
         label.className = "day-hour-row";
-        label.innerHTML = `<span>День ${index + 1}</span><span class="day-hour-input"><input type="number" min="0" max="12" step="0.5" inputmode="decimal" value="${values[index] ?? 0}" data-day-hours-input aria-label="Часов в день ${index + 1}"><small>ч</small></span>`;
+        const value = values[index] ?? { day: 0, night: 0 };
+        label.setAttribute("data-day-hours-row", "");
+        label.innerHTML = `<span>День ${index + 1}</span><span class="day-hour-pair"><span class="day-hour-input"><small>День</small><input type="number" min="0" max="12" step="0.5" inputmode="decimal" value="${value.day ?? value ?? 0}" data-day-hours-day aria-label="Дневных часов в день ${index + 1}"></span><span class="day-hour-input"><small>Ночь</small><input type="number" min="0" max="12" step="0.5" inputmode="decimal" value="${value.night ?? 0}" data-day-hours-night aria-label="Ночных часов в день ${index + 1}"></span></span>`;
         dayHoursContainer.append(label);
       }
 
       updateSelectedDayOptions(days, previousIndex);
-      getInputs().forEach((input, index) => {
-        input.addEventListener("input", () => {
+      getRows().forEach((row, index) => {
+        row.querySelectorAll("input").forEach((input) => input.addEventListener("input", () => {
           selectedDay.value = String(index);
           presetButtons.forEach((button) => button.setAttribute("aria-pressed", "false"));
           calculate();
-        });
+        }));
       });
       calculate();
     };
 
     const applyPreset = (hours) => {
-      const values = presets[hours];
-      daysSelect.value = String(values.length);
+      const dayValues = presets[hours];
+      const values = dayValues.map((day) => ({ day, night: 0 }));
+      daysSelect.value = String(dayValues.length);
       presetButtons.forEach((button) => {
         button.setAttribute("aria-pressed", String(Number(button.dataset.weeklyPreset) === hours));
       });
@@ -341,9 +221,9 @@
     };
 
     daysSelect.addEventListener("change", () => {
-      const currentValues = getInputs().map((input) => Number(input.value) || 0);
+      const currentValues = readRows();
       const days = Number(daysSelect.value);
-      const values = Array.from({ length: days }, (_, index) => currentValues[index] ?? 0);
+      const values = Array.from({ length: days }, (_, index) => currentValues[index] ?? { day: 0, night: 0 });
       presetButtons.forEach((button) => button.setAttribute("aria-pressed", "false"));
       renderDays(days, values);
     });
@@ -353,7 +233,7 @@
       button.addEventListener("click", () => applyPreset(Number(button.dataset.weeklyPreset)));
     });
 
-    applyPreset(31);
+    applyPreset(25);
   };
 
   const setupOrderDemo = () => {
@@ -433,9 +313,6 @@
     reset();
   };
 
-  setupProductGallery();
-  setupScrollReveal();
-  setupFaq();
   setupSupportCalculator();
   setupOrdersCalculator();
   setupOrderDemo();
