@@ -14,8 +14,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://bloomdesk.ru/">
   <link rel="icon" type="image/png" href="favicon.png?v=20260930">
-  <link rel="stylesheet" href="styles.css?v=20260930">
-  <script src="script.js?v=20260930" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261006-preview">
+  <script src="script.js?v=20261006-preview" defer></script>
   <title>BloomDesk — продуктовая IT-компания и разработчик SaaS-платформы</title>
 </head>
 <body>
@@ -68,41 +68,11 @@
           </div>
         </div>
 
-        <div class="product-window reveal reveal--delay" aria-label="Иллюстрация интерфейса SaaS-платформы BloomDesk">
-          <div class="window-bar"><span></span><span></span><span></span><div class="window-address">app.bloomdesk.ru / workspace</div></div>
-          <div class="app-shell">
-            <aside class="app-sidebar" aria-hidden="true">
-              <div class="app-brand">BloomDesk</div>
-              <div class="app-nav-item is-active">Рабочий стол</div>
-              <div class="app-nav-item">Заказы</div>
-              <div class="app-nav-item">Склад</div>
-              <div class="app-nav-item">Клиенты</div>
-              <div class="app-nav-item">Аналитика</div>
-            </aside>
-            <div class="app-main" aria-hidden="true">
-              <div class="app-heading"><strong>Рабочий стол</strong><span>Данные обновлены</span></div>
-              <div class="metric-grid">
-                <div class="metric-card"><small>Новые заказы</small><b>24</b><em>+8 сегодня</em></div>
-                <div class="metric-card"><small>В работе</small><b>18</b><em>по плану</em></div>
-                <div class="metric-card"><small>Выполнено</small><b>36</b><em>за день</em></div>
-              </div>
-              <div class="dashboard-grid">
-                <div class="ui-panel">
-                  <div class="ui-panel-title">Очередь заказов <span class="ui-status">Онлайн</span></div>
-                  <div class="order-row"><strong>#1048</strong><span>Новый заказ</span><span>10:30</span></div>
-                  <div class="order-row"><strong>#1047</strong><span>Комплектация</span><span>11:00</span></div>
-                  <div class="order-row"><strong>#1046</strong><span>Передан в доставку</span><span>12:15</span></div>
-                  <div class="order-row"><strong>#1045</strong><span>Готов к выдаче</span><span>13:40</span></div>
-                </div>
-                <div class="ui-panel">
-                  <div class="ui-panel-title">Динамика недели</div>
-                  <div class="bar-chart"><i style="height:38%"></i><i style="height:72%"></i><i style="height:54%"></i><i style="height:80%"></i><i style="height:96%"></i><i style="height:68%"></i></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <span class="mockup-caption">Иллюстрация продукта</span>
-        </div>
+        <figure class="product-window product-window--real reveal reveal--delay">
+          <div class="window-bar"><span></span><span></span><span></span><div class="window-address">BloomDesk · Заказы</div></div>
+          <img class="hero-product-image" src="product-orders.webp" alt="Реальный экран BloomDesk: очередь заказов, статусы и карточка выбранного заказа" width="1536" height="1024" fetchpriority="high">
+          <figcaption class="hero-product-caption"><span class="status-dot"></span> Интерфейс продукта · Заказы</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -133,50 +103,58 @@
     </section>
 
     <section class="section section--surface" id="platform">
-      <div class="container showcase">
-        <div class="showcase-copy">
-          <div class="eyebrow">Цифровой продукт</div>
-          <h2>Одна платформа для ежедневных процессов</h2>
-          <p>BloomDesk объединяет операционную работу в одном интерфейсе: данные доступны команде, статусы прозрачны, а решения принимаются на основе актуальной информации.</p>
-          <ul class="check-list">
-            <li>Единое рабочее пространство</li>
-            <li>Роли и доступы для команды</li>
-            <li>Актуальные статусы и уведомления</li>
-            <li>Отчёты без ручного сведения таблиц</li>
-          </ul>
+      <div class="container showcase showcase--gallery">
+        <div class="section-heading product-heading">
+          <div class="eyebrow">Одна платформа</div>
+          <h2>Все рабочие модули — в одном месте</h2>
+          <p>На первом экране — заказы. Здесь можно посмотреть три других модуля: склад, доставку и аналитику.</p>
         </div>
-        <div class="workspace-preview" aria-label="Пример модулей интерфейса платформы">
-          <div class="preview-column">
-            <div class="preview-card">
-              <header><strong>Заказы в работе</strong><span>Сегодня · 24</span></header>
-              <ul class="preview-list">
-                <li><span class="preview-avatar">A1</span><span><b>Заказ #1048</b><small>Новый · 10:30</small></span><em>Принят</em></li>
-                <li><span class="preview-avatar">B2</span><span><b>Заказ #1047</b><small>Сборка · 11:00</small></span><em>В работе</em></li>
-                <li><span class="preview-avatar">C3</span><span><b>Заказ #1046</b><small>Доставка · 12:15</small></span><em>В пути</em></li>
-              </ul>
-            </div>
-            <div class="preview-card">
-              <header><strong>Остатки и уведомления</strong><span>Склад</span></header>
-              <ul class="preview-list">
-                <li><span class="preview-avatar">01</span><span><b>Основной склад</b><small>Обновлено недавно</small></span><em>В норме</em></li>
-                <li><span class="preview-avatar">02</span><span><b>Расходные материалы</b><small>Нужна проверка</small></span><em>Внимание</em></li>
-              </ul>
-            </div>
+        <div class="product-gallery" data-product-gallery>
+          <div class="product-gallery-frame">
+            <div class="product-gallery-toolbar"><span data-product-label>01 / Склад</span><button type="button" data-product-zoom>Открыть крупно <span aria-hidden="true">↗</span></button></div>
+            <button class="product-gallery-media" type="button" data-product-zoom aria-label="Открыть выбранный экран BloomDesk крупно">
+              <img src="product-stock.webp" alt="Реальный интерфейс BloomDesk: складской учёт" width="1536" height="1024" loading="lazy" data-product-image>
+            </button>
+            <div class="product-gallery-caption"><div><strong data-product-title>Склад: остатки и свежесть под контролем</strong><p data-product-description>Остатки, резервы и предупреждения о минимальном количестве — в одном экране.</p></div><span data-product-counter>01 / 03</span></div>
           </div>
-          <div class="preview-column">
-            <div class="preview-card">
-              <header><strong>Выполнение плана</strong><span>Неделя</span></header>
-              <div class="donut" aria-hidden="true"></div>
-              <div class="mini-legend"><span>Выполнено <b>84%</b></span><span>В работе <b>12%</b></span><span>Новые <b>4%</b></span></div>
-            </div>
-            <div class="preview-card">
-              <header><strong>Клиентский профиль</strong><span>CRM</span></header>
-              <ul class="preview-list">
-                <li><span class="preview-avatar">КЛ</span><span><b>История заказов</b><small>Данные в одном месте</small></span><em>Открыть</em></li>
-              </ul>
-            </div>
+          <div class="product-gallery-tabs" role="tablist" aria-label="Другие экраны продукта">
+            <button class="is-active" type="button" role="tab" aria-selected="true" tabindex="0" data-product-tab data-image="product-stock.webp" data-label="01 / Склад" data-title="Склад: остатки и свежесть под контролем" data-description="Остатки, резервы и предупреждения о минимальном количестве — в одном экране." data-alt="Реальный интерфейс BloomDesk: складской учёт" data-counter="01 / 03">Склад</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-product-tab data-image="product-delivery.webp" data-label="02 / Доставка" data-title="Доставка: маршрут и статусы на виду" data-description="Курьеры, адреса и порядок точек собраны на карте текущего дня." data-alt="Реальный интерфейс BloomDesk: управление доставкой" data-counter="02 / 03">Доставка</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-product-tab data-image="product-analytics.webp" data-label="03 / Аналитика" data-title="Аналитика для решений по бизнесу" data-description="Выручка, прибыль и динамика продаж без ручного сведения отчётов." data-alt="Реальный интерфейс BloomDesk: аналитика бизнеса" data-counter="03 / 03">Аналитика</button>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section order-flow" id="workflow">
+      <div class="container">
+        <div class="section-heading section-heading--center">
+          <div class="eyebrow">От заказа к результату</div>
+          <h2>Как проходит один заказ</h2>
+        </div>
+        <ol class="order-flow-list">
+          <li><span>01</span><strong>Новый заказ</strong></li>
+          <li><span>02</span><strong>Резерв на складе</strong></li>
+          <li><span>03</span><strong>Сборка</strong></li>
+          <li><span>04</span><strong>Доставка</strong></li>
+          <li><span>05</span><strong>Аналитика</strong></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section--surface" id="users">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Для команды</div>
+          <h2>Каждому — свой рабочий контекст</h2>
+        </div>
+        <ul class="role-list">
+          <li><strong>Руководитель</strong><span>Показатели и динамика</span></li>
+          <li><strong>Администратор</strong><span>Процессы и доступы</span></li>
+          <li><strong>Менеджер заказов</strong><span>Очередь и сроки</span></li>
+          <li><strong>Флорист</strong><span>Состав и сборка</span></li>
+          <li><strong>Курьер</strong><span>Адреса и маршрут</span></li>
+        </ul>
       </div>
     </section>
 
@@ -257,6 +235,18 @@
       </div>
     </section>
 
+    <section class="section faq-section" id="faq">
+      <div class="container faq-layout">
+        <div class="faq-intro"><div class="eyebrow">Коротко о платформе</div><h2>Частые вопросы</h2><p>Основное о работе BloomDesk и подключении команды.</p></div>
+        <div class="home-faq-list">
+          <details class="faq-item"><summary>Что автоматизирует BloomDesk?</summary><p>Платформа связывает заказы, складские остатки, сборку, доставку и управленческую аналитику.</p></details>
+          <details class="faq-item"><summary>Нужен ли отдельный сервер?</summary><p>Нет. BloomDesk работает как облачный сервис: команда входит в рабочее пространство через браузер.</p></details>
+          <details class="faq-item"><summary>Как проходит подключение?</summary><p>Сначала мы знакомимся с процессами бизнеса, затем настраиваем рабочее пространство, роли и доступы команды.</p></details>
+          <details class="faq-item"><summary>Можно ли работать нескольким магазинам?</summary><p>Да. В одном рабочем пространстве можно вести процессы нескольких магазинов.</p></details>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--tight" id="demo">
       <div class="container">
         <div class="cta-panel">
@@ -270,6 +260,10 @@
       </div>
     </section>
   </main>
+
+  <dialog class="product-lightbox" data-product-lightbox aria-label="Экран интерфейса BloomDesk">
+    <div class="product-lightbox-inner"><div class="product-lightbox-header"><span data-lightbox-label>Экран BloomDesk</span><button type="button" data-lightbox-close aria-label="Закрыть">×</button></div><img src="product-stock.webp" alt="Экран интерфейса BloomDesk" data-lightbox-image></div>
+  </dialog>
 
   <footer class="site-footer" id="footer">
     <div class="container">

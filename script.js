@@ -1,4 +1,67 @@
 (() => {
+  const gallery = document.querySelector("[data-product-gallery]");
+  if (gallery) {
+    const tabs = [...gallery.querySelectorAll("[data-product-tab]")];
+    const image = gallery.querySelector("[data-product-image]");
+    const label = gallery.querySelector("[data-product-label]");
+    const title = gallery.querySelector("[data-product-title]");
+    const description = gallery.querySelector("[data-product-description]");
+    const counter = gallery.querySelector("[data-product-counter]");
+    const dialog = document.querySelector("[data-product-lightbox]");
+    const dialogImage = dialog?.querySelector("[data-lightbox-image]");
+    const dialogLabel = dialog?.querySelector("[data-lightbox-label]");
+    let activeIndex = 0;
+
+    const selectTab = (index, focus = false) => {
+      const tab = tabs[index];
+      if (!tab) return;
+      activeIndex = index;
+      image.src = tab.dataset.image;
+      image.alt = tab.dataset.alt;
+      label.textContent = tab.dataset.label;
+      title.textContent = tab.dataset.title;
+      description.textContent = tab.dataset.description;
+      counter.textContent = tab.dataset.counter;
+      tabs.forEach((item, itemIndex) => {
+        const selected = itemIndex === index;
+        item.classList.toggle("is-active", selected);
+        item.setAttribute("aria-selected", String(selected));
+        item.tabIndex = selected ? 0 : -1;
+      });
+      if (dialogImage) {
+        dialogImage.src = tab.dataset.image;
+        dialogImage.alt = tab.dataset.alt;
+      }
+      if (dialogLabel) dialogLabel.textContent = tab.dataset.label;
+      if (focus) tab.focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectTab(index));
+      tab.addEventListener("keydown", (event) => {
+        let next = null;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") next = 0;
+        if (event.key === "End") next = tabs.length - 1;
+        if (next === null) return;
+        event.preventDefault();
+        selectTab(next, true);
+      });
+    });
+
+    gallery.querySelectorAll("[data-product-zoom]").forEach((button) => button.addEventListener("click", () => dialog?.showModal()));
+    dialog?.querySelector("[data-lightbox-close]")?.addEventListener("click", () => dialog.close());
+    dialog?.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+
+  const faqItems = [...document.querySelectorAll(".faq-item")];
+  faqItems.forEach((item) => item.addEventListener("toggle", () => {
+    if (item.open) faqItems.forEach((other) => { if (other !== item) other.open = false; });
+  }));
+
   const header = document.querySelector("[data-header]");
   const menuButton = document.querySelector("[data-menu-button]");
   const mobileNav = document.querySelector("[data-mobile-nav]");
