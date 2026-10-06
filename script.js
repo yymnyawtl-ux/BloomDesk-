@@ -376,7 +376,53 @@
     reset();
   };
 
+  const setupTeamCarousel = () => {
+    const carousel = document.querySelector("[data-team-carousel]");
+    if (!carousel) return;
+
+    const slides = [...carousel.querySelectorAll("[data-team-slide]")];
+    const dots = [...carousel.querySelectorAll("[data-team-dot]")];
+    const title = carousel.querySelector("[data-team-title]");
+    const caption = carousel.querySelector("[data-team-caption]");
+    const count = carousel.querySelector("[data-team-count]");
+    const live = carousel.querySelector("[data-team-live]");
+    const items = [
+      { title: "Команда", caption: "Люди и идеи, стоящие за цифровым продуктом." },
+      { title: "Презентация продукта", caption: "Показываем, как платформа помогает цветочному бизнесу." },
+      { title: "Командное мероприятие", caption: "Иногда полезно сменить привычную обстановку." },
+      { title: "Разговор о развитии", caption: "Обсуждаем идеи, цели и то, куда движется продукт." }
+    ];
+    let activeIndex = 0;
+
+    const show = (index) => {
+      activeIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        const active = slideIndex === activeIndex;
+        slide.hidden = !active;
+        slide.classList.toggle("is-active", active);
+        slide.setAttribute("aria-hidden", String(!active));
+      });
+      dots.forEach((dot, dotIndex) => dot.setAttribute("aria-pressed", String(dotIndex === activeIndex)));
+      const item = items[activeIndex];
+      title.textContent = item.title;
+      caption.textContent = item.caption;
+      count.textContent = `${String(activeIndex + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+      live.textContent = `Фото ${activeIndex + 1} из ${slides.length}. ${item.title}`;
+    };
+
+    carousel.querySelector("[data-team-prev]").addEventListener("click", () => show(activeIndex - 1));
+    carousel.querySelector("[data-team-next]").addEventListener("click", () => show(activeIndex + 1));
+    dots.forEach((dot) => dot.addEventListener("click", () => show(Number(dot.dataset.teamDot))));
+    carousel.addEventListener("keydown", (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.key === "ArrowLeft") show(activeIndex - 1);
+      if (event.key === "ArrowRight") show(activeIndex + 1);
+    });
+    show(0);
+  };
+
   setupSupportCalculator();
   setupOrdersCalculator();
   setupOrderDemo();
+  setupTeamCarousel();
 })();
